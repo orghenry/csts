@@ -75,12 +75,19 @@
 			// Event listener for "Create Issue for Notes" button
 			document.querySelectorAll('#issue-button').forEach((button, index) => {
 				button.addEventListener('click', () => {
-					const slide = Reveal.getCurrentSlide();
-					const slideNumber = parseInt(slide.dataset.index, 10); // Convert to number
+					// Get the current slide's indices (both horizontal and vertical)
+					const currentSlide = Reveal.getCurrentSlide();
+					const indices = Reveal.getIndices(currentSlide);
 
-					console.log(slide);
+					// Horizontal index (h) and Vertical index (v)
+					const horizontalIndex = indices.h;
+					const verticalIndex = indices.v;
 
-					//openGitHubIssue(slideNumber);
+					// Assuming you have vertical slides, the total index is calculated as:
+					const totalIndex = horizontalIndex * Reveal.getConfig().controls ? indices.v + 1 : 0 + verticalIndex;
+					console.log("Total Slide Index (h + v): " + totalIndex); 
+
+					openGitHubIssue(totalIndex);
 				});
 			});			
 		</script>
