@@ -66,14 +66,17 @@
 			// Example function to open GitHub Issue
 			function openGitHubIssue(slideNumber) {
 				currentSlide = Reveal.getCurrentSlide();
+        
+				// Get the value of the data-markdown attribute
+				let markdownFile = currentSlide.getAttribute('data-markdown');
 
-				const issueTitle = `Notes for Slide ${slideNumber}`;
+				const issueTitle = `[${markdownFile}] Notes for Slide ${slideNumber}`;
 				//const issueBody = `Please add the notes for slide number ${slideNumber}.`;
 				const slideContent = currentSlide.innerHTML;
 				// If you want just the text content (without HTML tags):
 				const slideTextContent = currentSlide.textContent || currentSlide.innerText;
 
-				const issueBody = slideTextContent;
+				const issueBody = markdownFile+"\n"+slideTextContent;
 
 				const url = `https://github.com/orghenry/csts/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
 				window.open(url, '_blank');
