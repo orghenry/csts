@@ -11,7 +11,7 @@ title: Home
         <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
         <div class="entry">
           <!-- {{ post.content | truncate: 300 }} -->
-            {% assign lines = post.content | split: '\n' %}
+            {% assign lines = post.content | strip_html | split: '\n' %}
             {% assign first_five_lines = lines[0..4] %}
             {{ first_five_lines | join: '\n' }}
 
