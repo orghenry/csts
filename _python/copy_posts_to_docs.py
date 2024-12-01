@@ -77,14 +77,14 @@ def generate_section_list(source_folder):
 
 
                     # Generate the section for each Markdown file
-                    file_path = os.path.join(root, filename)
-                    
+                    file_path = os.path.join(folder_name, filename)
+
                     # Extract the relative path from the source folder
-                    relative_path = os.path.relpath(file_path, folder_name)
+                    #relative_path = os.path.relpath(file_path, folder_name)
                     
                     
                     # Create the section tag for this file
-                    section_tag = f'<section data-markdown="{relative_path}" data-separator="\\n---" data-separator-vertical="\\n--"></section>\n'
+                    section_tag = f'<section data-markdown="{file_path}" data-separator="\\n---" data-separator-vertical="\\n--"></section>\n'
                     
                     # Append the section tag to the section_list
                     section_list += section_tag
