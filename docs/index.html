@@ -33,7 +33,12 @@
 
 		<div class="reveal">
 		<!-- Floating button -->
-		<div id="issue-button"></div>
+		<div id="issue-button">슬라이드 수정</div>
+
+		<div class="slides"><section data-markdown="csts/24-12-01-csts-00-contents.md" data-separator="\n---" data-separator-vertical="\n--"></section>
+<section data-markdown="csts/24-12-01-csts-98-refs.md" data-separator="\n---" data-separator-vertical="\n--"></section>
+<section data-markdown="csts/24-12-01-csts-99-index.md" data-separator="\n---" data-separator-vertical="\n--"></section>
+</div>
 
 		<div class="slides"><section data-markdown="csts/24-12-01-csts-00-contents.md" data-separator="\n---" data-separator-vertical="\n--"></section>
 <section data-markdown="csts/24-12-01-csts-98-refs.md" data-separator="\n---" data-separator-vertical="\n--"></section>
@@ -74,10 +79,9 @@
 			}
 
 			// Event listener for "Create Issue for Notes" button
-			document.querySelectorAll('.issue-btn').forEach((button, index) => {
+			document.querySelectorAll('#issue-button').forEach((button, index) => {
 				button.addEventListener('click', () => {
-					// Get the current slide number
-					const slideNumber = index + 1;  // Slide index is 0-based, so add 1
+					const slideNumber = Reveal.getCurrentSlide().dataset.index + 1; // Get the current slide number
 					openGitHubIssue(slideNumber);
 				});
 			});			
