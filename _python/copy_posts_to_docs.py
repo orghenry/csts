@@ -1,5 +1,6 @@
 import os
 import shutil
+import re
 
 source_folder = "../_posts/csts"
 target_base_folder = "../docs"
@@ -103,16 +104,22 @@ print(section_list)
 with open(target_html_path, 'r', encoding='utf-8') as file:
     html_content = file.read()
 
-# Find the <div class="slides"> tag and insert the section list inside it
-start_tag = '<div class="slides">'
-end_tag = '</div>'
 
-start_index = html_content.find(start_tag)
-end_index = html_content.find(end_tag)
+# Regular expression to find the content between <div class="slides"> and </div>
+start_tag = r'<div class="slides">'
+end_tag = r'</div>'
 
-if start_index != -1 and end_index != -1:
-    # Replace the content inside <div class="slides"> with the section list
-    html_content = html_content[:start_index + len(start_tag)] + section_list + html_content[end_index:]
+# Use regular expression to find the matching pair of tags
+matches = re.search(f'({start_tag})(.*?){end_tag}', html_content, re.DOTALL)
+
+if matches:
+    # Extract the matched content and replace it with the section list
+    before = html_content[:matches.start(2)]  # Everything before the slide content
+    after = html_content[matches.end(2):]    # Everything after the slide content
+    html_content = before + start_tag + section_list + end_tag + after
+    print("Replacement successful.")
+else:
+    print("Error: Could not find the matching tags.")
 
 # Write the updated content back to the target HTML file
 with open(target_html_path, 'w', encoding='utf-8') as file:
