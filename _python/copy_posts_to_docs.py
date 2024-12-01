@@ -104,22 +104,13 @@ print(section_list)
 with open(target_html_path, 'r', encoding='utf-8') as file:
     html_content = file.read()
 
+# Define the block to remove (the entire <div class="slides"> block)
+block_to_remove = r'<div class="slides">.*?</div>'
+# Define the new <div class="slides"> block that will replace the old block
+new_slide_block = f'<div class="slides">{section_list}</div>'
 
-# Regular expression to find the content between <div class="slides"> and </div>
-start_tag = r'<div class="slides">'
-end_tag = r'</div>'
-
-# Use regular expression to find the matching pair of tags
-matches = re.search(f'({start_tag})(.*?){end_tag}', html_content, re.DOTALL)
-
-if matches:
-    # Extract the matched content and replace it with the section list
-    before = html_content[:matches.start(2)]  # Everything before the slide content
-    after = html_content[matches.end(2):]    # Everything after the slide content
-    html_content = before + start_tag + section_list + end_tag + after
-    print("Replacement successful.")
-else:
-    print("Error: Could not find the matching tags.")
+# Replace the block in the HTML content
+html_content = re.sub(block_to_remove, new_slide_block, html_content, flags=re.DOTALL)
 
 # Write the updated content back to the target HTML file
 with open(target_html_path, 'w', encoding='utf-8') as file:
