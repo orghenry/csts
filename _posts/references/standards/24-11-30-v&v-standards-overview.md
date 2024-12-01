@@ -2,8 +2,8 @@
 layout: post
 title: "소프트웨어 검증 및 확인 관련 표준 가이드"
 #date: 2024-11-23
-categories: [v&v]
-tags: [standard,v&v]
+categories: [표준]
+tags: [v&v]
 ---
 
 ### 소프트웨어 검증 및 확인 관련 표준 가이드

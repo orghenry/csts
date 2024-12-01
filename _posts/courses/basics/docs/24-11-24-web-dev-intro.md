@@ -2,8 +2,8 @@
 layout: post
 title: "Web Dev"
 #date: 2024-11-23
-categories: [course]
-tags: [web]
+categories: [devops]
+tags: [dev]
 ---
 
 <!-- Another section with background -->

@@ -2,8 +2,8 @@
 layout: post
 title: "Web Ops"
 #date: 2024-11-23
-categories: [course]
-tags: [web]
+categories: [devops]
+tags: [ops]
 ---
 
 

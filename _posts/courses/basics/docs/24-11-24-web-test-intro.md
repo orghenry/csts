@@ -2,8 +2,8 @@
 layout: post
 title: "Web Test"
 #date: 2024-11-23
-categories: [course]
-tags: [web]
+categories: [devops]
+tags: [test]
 ---
 
 <!-- .slide: data-background="linear-gradient(to right, white, #0072ff)" -->
