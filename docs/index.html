@@ -17,15 +17,41 @@
 
 		<div class="reveal">
 
-		<div class="slides">
+		<!-- <div class="slides">
 			<section data-markdown="24-12-01-csts-00-contents.md" data-separator="\n---" data-separator-vertical="\n--"></section>
-		</div>
+		</div> -->
 
 		<script src="reveal/dist/reveal.js"></script>
         <script src="reveal/plugin/markdown/markdown.js"></script>
         <script src="reveal/plugin/highlight/highlight.js"></script>
         <script src="reveal/plugin/notes/notes.js"></script>
         <script src="reveal/plugin/math/math.js"></script>
+
+		<div class="slides"></div>
+
+		<script>
+			// Markdown 파일 로드 및 YAML 헤더 제거
+			async function loadMarkdownWithYamlRemoval(filePath) {
+				const response = await fetch(filePath);
+				const content = await response.text();
+		
+				// YAML 헤더 제거 정규식
+				const cleanedContent = content.replace(/^---[\s\S]*?---/, '').trim();
+		
+				// 슬라이드 삽입
+				document.querySelector('.slides').innerHTML = `
+					<section data-markdown>
+						<textarea data-template>${cleanedContent}</textarea>
+					</section>
+				`;
+		
+				// Reveal.js 초기화
+				Reveal.sync();
+			}
+		
+			// Markdown 파일 로드
+			loadMarkdownWithYamlRemoval('24-12-01-csts-00-contents.md');
+		</script>
 
 		<script>
 
