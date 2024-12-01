@@ -42,31 +42,77 @@ def remove_first_yaml_front_matter(file_path):
 
     return content
 
-# Process all files in the docs folder and subdirectories
-for root, _, files in os.walk(source_folder):
-    for filename in files:
-        if filename.endswith(".md"):
-            # Extract folder name from the file name
-            parts = filename.split("-")
-            if len(parts) >= 4:  # Ensure file name is in the expected format
-                folder_name = parts[3]  # e.g., 'csts'
+# Function to generate the section list for the slides
+def generate_section_list(source_folder):
+    section_list = ""
 
-                # Target folder path
-                target_folder = os.path.join(target_base_folder, folder_name)
+    # Process all files in the docs folder and subdirectories
+    for root, _, files in os.walk(source_folder):
+        for filename in files:
+            if filename.endswith(".md"):
+                # Extract folder name from the file name
+                parts = filename.split("-")
+                if len(parts) >= 4:  # Ensure file name is in the expected format
+                    folder_name = parts[3]  # e.g., 'csts'
 
-                # Create target folder if it doesn't exist
-                if not os.path.exists(target_folder):
-                    os.makedirs(target_folder)
+                    # Target folder path
+                    target_folder = os.path.join(target_base_folder, folder_name)
 
-                # Set file paths
-                file_path = os.path.join(root, filename)
-                new_file_path = os.path.join(target_folder, filename)
+                    # Create target folder if it doesn't exist
+                    if not os.path.exists(target_folder):
+                        os.makedirs(target_folder)
 
-                # Remove first YAML block and copy file
-                cleaned_content = remove_first_yaml_front_matter(file_path)
+                    # Set file paths
+                    file_path = os.path.join(root, filename)
+                    new_file_path = os.path.join(target_folder, filename)
 
-                # Write cleaned content to the new file
-                with open(new_file_path, 'w', encoding='utf-8') as new_file:
-                    new_file.write(cleaned_content)
+                    # Remove first YAML block and copy file
+                    cleaned_content = remove_first_yaml_front_matter(file_path)
 
-                print(f"Copied: {file_path} -> {new_file_path}")
+                    # Write cleaned content to the new file
+                    with open(new_file_path, 'w', encoding='utf-8') as new_file:
+                        new_file.write(cleaned_content)
+
+                    print(f"Copied: {file_path} -> {new_file_path}")
+
+
+                    # Generate the section for each Markdown file
+                    file_path = os.path.join(root, filename)
+                    
+                    # Extract the relative path from the source folder
+                    relative_path = os.path.relpath(file_path, folder_name)
+                    
+                    
+                    # Create the section tag for this file
+                    section_tag = f'<section data-markdown="{relative_path}" data-separator="\\n---" data-separator-vertical="\\n--"></section>\n'
+                    
+                    # Append the section tag to the section_list
+                    section_list += section_tag
+    
+    return section_list
+
+# Generate the section list
+section_list = generate_section_list(source_folder)
+
+print(section_list)
+
+# Read the target HTML file
+with open(target_html_path, 'r', encoding='utf-8') as file:
+    html_content = file.read()
+
+# Find the <div class="slides"> tag and insert the section list inside it
+start_tag = '<div class="slides">'
+end_tag = '</div>'
+
+start_index = html_content.find(start_tag)
+end_index = html_content.find(end_tag)
+
+if start_index != -1 and end_index != -1:
+    # Replace the content inside <div class="slides"> with the section list
+    html_content = html_content[:start_index + len(start_tag)] + section_list + html_content[end_index:]
+
+# Write the updated content back to the target HTML file
+with open(target_html_path, 'w', encoding='utf-8') as file:
+    file.write(html_content)
+
+print(f"Updated {target_html_path} with the new section list inside <div class='slides'>.")
