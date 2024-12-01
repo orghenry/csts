@@ -1,7 +1,7 @@
 markdown: kramdown
 theme: jekyll-theme-slate
 
-baseurl: "/csts"
+# baseurl: "/csts"
 
 #permalink: /:categories/:year/:month/:day/:title/
 paginate: 5
