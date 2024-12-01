@@ -72,30 +72,71 @@
 				window.open(url, '_blank');
 			}
 
-			// Method 5: Advanced Indexing with Nested Slides
-			function getAdvancedSlideInfo() {
+			// Function to get current and total slide indices at any time
+			function getCurrentSlideIndices() {
+				// Get current slide indices using Reveal.js
 				const indices = Reveal.getIndices();
 				
+				// Get all horizontal slides
+				const horizontalSlides = document.querySelectorAll('.slides > section');
+				
+				// Get vertical slides in the current horizontal section
+				const currentHorizontalSlide = horizontalSlides[indices.h];
+				const verticalSlides = currentHorizontalSlide.querySelectorAll('section');
+				
 				return {
+					// Current slide indices (1-based for readability)
 					current: {
-						h: indices.h,   // Horizontal index
-						v: indices.v    // Vertical index
+						horizontal: indices.h + 1,
+						vertical: indices.v + 1
 					},
+					// Total slide counts
 					total: {
-						h: document.querySelectorAll('.slides > section').length,
-						v: document.querySelectorAll('.slides section section').length
+						horizontal: horizontalSlides.length,
+						vertical: verticalSlides.length
 					},
-					fullNotation: `${indices.h + 1}.${indices.v + 1}`
+					// Raw indices (0-based)
+					raw: {
+						horizontal: indices.h,
+						vertical: indices.v
+					},
+					// Detailed slide notation
+					notation: {
+						// Formats like "2.1" for 2nd horizontal slide, 1st vertical slide
+						full: `${indices.h + 1}.${indices.v + 1}`,
+						// Formats for different use cases
+						display: `Slide ${indices.h + 1}.${indices.v + 1}`
+					}
 				};
 			}
 
+			// Example use cases
+			function demonstrateSlideIndicesRetrieval() {
+				// Get current slide indices at any time
+				const slideIndices = getCurrentSlideIndices();
+				
+				// Various ways to access slide information
+				console.log('Current Horizontal Slide:', slideIndices.current.horizontal);
+				console.log('Total Horizontal Slides:', slideIndices.total.horizontal);
+				
+				console.log('Current Vertical Slide:', slideIndices.current.vertical);
+				console.log('Total Vertical Slides:', slideIndices.total.vertical);
+				
+				console.log('Full Slide Notation:', slideIndices.notation.full);
+				console.log('Display Notation:', slideIndices.notation.display);
+				
+				// Raw 0-based indices (for internal use)
+				console.log('Raw Horizontal Index:', slideIndices.raw.horizontal);
+				console.log('Raw Vertical Index:', slideIndices.raw.vertical);
+			}
 			// Event listener for "Create Issue for Notes" button
 			document.querySelectorAll('#issue-button').forEach((button, index) => {
 				button.addEventListener('click', () => {
-					full = getAdvancedSlideInfo().fullNotation
+					//full = getAdvancedSlideInfo().fullNotation
 					
 					// Assuming you have vertical slides, the total index is calculated as:
 					console.log(full); 
+					demonstrateSlideIndicesRetrieval();
 
 					//openGitHubIssue(totalIndex);
 				});
