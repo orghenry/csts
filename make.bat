@@ -1,5 +1,7 @@
 git status
-python _python\build-all.py
+cd _python
+python build-all.py
+cd ..
 git add .
 git commit -m "updated"
 git push
