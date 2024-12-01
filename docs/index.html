@@ -62,7 +62,25 @@
 				//pdfPageHeightOffset: 5,
 			});
 
+			Reveal.on('slidechanged', function(event) {
+				// Get the markdown file for the newly activated slide
+				getCurrentMarkdownFile();
+			});
 
+			// Function to get the current markdown file name
+			function getCurrentMarkdownFile() {
+				const currentSlide = Reveal.getCurrentSlide(); // Get the current slide
+				const markdownFile = currentSlide.getAttribute('data-markdown'); // Get the data-markdown attribute
+
+				if (markdownFile) {
+					console.log('Current Markdown File:', markdownFile); // Log the markdown file name
+					return markdownFile;
+				} else {
+					console.log('No markdown file associated with this slide.');
+					return null; // Return null if no markdown file is associated
+				}
+			}
+			
 			// Example function to open GitHub Issue
 			function openGitHubIssue(slideNumber) {
 				currentSlide = Reveal.getCurrentSlide();
