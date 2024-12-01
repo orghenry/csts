@@ -110,10 +110,20 @@ end_tag = '</div>'
 start_index = html_content.find(start_tag)
 end_index = html_content.find(end_tag)
 
-if start_index != -1 and end_index != -1:
-    # Replace the content inside <div class="slides"> with the section list
-    html_content = html_content[:start_index + len(start_tag)] + section_list + html_content[end_index:]
+# Debugging: print the positions and surrounding content
+print(f"Start index: {start_index}, End index: {end_index}")
 
+if start_index != -1 and end_index != -1:
+    # Make sure the end_tag appears after the start_tag
+    if start_index < end_index:
+        # Replace the content inside <div class="slides"> with the section list
+        html_content = html_content[:start_index + len(start_tag)] + section_list + html_content[end_index:]
+        print("Replacement successful.")
+    else:
+        print("Error: End tag comes before start tag.")
+else:
+    print("Error: Could not find both start and end tags.")
+    
 # Write the updated content back to the target HTML file
 with open(target_html_path, 'w', encoding='utf-8') as file:
     file.write(html_content)
