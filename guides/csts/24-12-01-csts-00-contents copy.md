@@ -1,3 +1,12 @@
+---
+layout: post
+title: "CSTS GUIDE"
+#date: 2024-11-23
+categories: [csts]
+tags: [guide]
+
+---
+
 PART 01  테스트 개요
 
 ---
