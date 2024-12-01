@@ -1,38 +1,38 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+<head>
+	<meta charset="utf-8">
 
-		<title>TTA 아카데미 CSTS Guide</title>
+	<title>TTA 아카데미 CSTS Guide</title>
 
-		<link rel="stylesheet" href="reveal/dist/reveal.css">
-		<link rel="stylesheet" href="reveal/dist/theme/white.css" id="theme">
-		<link rel="stylesheet" href="reveal/css/custom/tta.css">
+	<link rel="stylesheet" href="reveal/dist/reveal.css">
+	<link rel="stylesheet" href="reveal/dist/theme/white.css" id="theme">
+	<link rel="stylesheet" href="reveal/css/custom/tta.css">
 
-        <link rel="stylesheet" href="reveal/plugin/highlight/monokai.css">
+	<link rel="stylesheet" href="reveal/plugin/highlight/monokai.css">
 
-		<style>
-			/* Floating button (invisible by default) */
-			#issue-button {
-			  position: fixed;
-			  top: 20px;
-			  right: 20px;
-			  background-color: rgb(18, 59, 241);
-			  color: white;
-			  padding: 10px 10px;
-			  border-radius: 5px;
-			  cursor: pointer;
-			  z-index: 1000;
-			  font-size: 12px;
-			}
-		</style>
+	<style>
+		/* Floating button (invisible by default) */
+		#issue-button {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			background-color: rgb(18, 59, 241);
+			color: white;
+			padding: 10px 10px;
+			border-radius: 5px;
+			cursor: pointer;
+			z-index: 1000;
+			font-size: 12px;
+		}
+	</style>
 
-	</head>
+</head>
 
-	<body>
+<body>
 
-		<div class="reveal">
+	<div class="reveal">
 		<!-- Floating button -->
 		<div id="issue-button">수정요청</div>
 
@@ -42,10 +42,10 @@
 </div>
 
 		<script src="reveal/dist/reveal.js"></script>
-        <script src="reveal/plugin/markdown/markdown.js"></script>
-        <script src="reveal/plugin/highlight/highlight.js"></script>
-        <script src="reveal/plugin/notes/notes.js"></script>
-        <script src="reveal/plugin/math/math.js"></script>
+		<script src="reveal/plugin/markdown/markdown.js"></script>
+		<script src="reveal/plugin/highlight/highlight.js"></script>
+		<script src="reveal/plugin/notes/notes.js"></script>
+		<script src="reveal/plugin/math/math.js"></script>
 
 		<script>
 
@@ -54,29 +54,40 @@
 				progress: true,
 				history: true,
 				//center: true,
-                slideNumber: 'c/t',
+				slideNumber: 'c/t',
 
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes],
-                pdfSeparateFragments: false,
-                //pdfMaxPagesPerSlide: 1,
-                //pdfPageHeightOffset: 5,
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+				pdfSeparateFragments: false,
+				//pdfMaxPagesPerSlide: 1,
+				//pdfPageHeightOffset: 5,
 			});
 
 
-			// Function to open GitHub Issue Template
+			// Example function to open GitHub Issue
 			function openGitHubIssue(slideNumber) {
-				const issueTemplateUrl = `https://github.com/orghenry/csts/issues/new?title=Slide+${slideNumber}+Speaker+Notes&body=Speaker+notes+for+Slide+${slideNumber}.`;
-				window.open(issueTemplateUrl, "_blank");
+				const issueTitle = `Notes for Slide ${slideNumber}`;
+				const issueBody = `Please add the notes for slide number ${slideNumber}.`;
+
+				const url = `https://github.com/your-repo/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+				window.open(url, '_blank');
 			}
 
 			// Event listener for "Create Issue for Notes" button
 			document.querySelectorAll('#issue-button').forEach((button, index) => {
 				button.addEventListener('click', () => {
-					const slideNumber = Reveal.getCurrentSlide().dataset.index + 1; // Get the current slide number
+					const slide = Reveal.getCurrentSlide();
+					const slideNumber = parseInt(slide.dataset.index, 10); // Convert to number
+
+					if (isNaN(slideNumber)) {
+						console.error("Slide number is not a valid number.");
+						return;
+					}
+
 					openGitHubIssue(slideNumber);
 				});
 			});			
 		</script>
 
-	</body>
+</body>
+
 </html>
