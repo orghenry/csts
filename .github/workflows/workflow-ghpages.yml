@@ -1,0 +1,34 @@
+name: Run Build-All Script
+
+on:
+  push:
+    paths:
+      - '_posts/**' # Trigger on changes in a specific folder and subfolders
+  pull_request:
+    paths:
+      - '_posts/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9' # Adjust based on your Python version requirements
+
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r _python/requirements.txt
+
+    # Step 4: Run build-all.py
+    - name: Run build-all.py
+      run: python _python/build-all.py
