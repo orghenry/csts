@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "CSTS GUIDE"
+title: "CSTS GUIDE - 목차"
 #date: 2024-11-23
 categories: [csts]
 tags: [guide]
