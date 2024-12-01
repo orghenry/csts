@@ -1,54 +1,55 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+<head>
+	<meta charset="utf-8">
 
-		<title>TTA 아카데미 CSTS Guide</title>
+	<title>TTA 아카데미 CSTS Guide</title>
 
-		<link rel="stylesheet" href="reveal/dist/reveal.css">
-		<link rel="stylesheet" href="reveal/dist/theme/white.css" id="theme">
-		<link rel="stylesheet" href="reveal/css/custom/tta.css">
+	<link rel="stylesheet" href="reveal/dist/reveal.css">
+	<link rel="stylesheet" href="reveal/dist/theme/white.css" id="theme">
+	<link rel="stylesheet" href="reveal/css/custom/tta.css">
 
-        <link rel="stylesheet" href="reveal/plugin/highlight/monokai.css">
-	</head>
+	<link rel="stylesheet" href="reveal/plugin/highlight/monokai.css">
+</head>
 
-	<body>
+<body>
 
-		<div class="reveal">
+	<div class="reveal">
 
 		<!-- <div class="slides">
 			<section data-markdown="24-12-01-csts-00-contents.md" data-separator="\n---" data-separator-vertical="\n--"></section>
 		</div> -->
 
 		<script src="reveal/dist/reveal.js"></script>
-        <script src="reveal/plugin/markdown/markdown.js"></script>
-        <script src="reveal/plugin/highlight/highlight.js"></script>
-        <script src="reveal/plugin/notes/notes.js"></script>
-        <script src="reveal/plugin/math/math.js"></script>
+		<script src="reveal/plugin/markdown/markdown.js"></script>
+		<script src="reveal/plugin/highlight/highlight.js"></script>
+		<script src="reveal/plugin/notes/notes.js"></script>
+		<script src="reveal/plugin/math/math.js"></script>
 
 		<div class="slides"></div>
 
 		<script>
 			// Markdown 파일 로드 및 YAML 헤더 제거
 			async function loadMarkdownWithYamlRemoval(filePath) {
-				const response = await fetch(filePath);
-				const content = await response.text();
-		
-				// YAML 헤더 제거 정규식
-				const cleanedContent = content.replace(/^---[\s\S]*?---/, '').trim();
-		
-				// 슬라이드 삽입
-				document.querySelector('.slides').innerHTML = `
-					<section data-markdown>
-						<textarea data-template>${cleanedContent}</textarea>
-					</section>
-				`;
-		
-				// Reveal.js 초기화
-				Reveal.sync();
+				try {
+					const response = await fetch(filePath);
+					if (!response.ok) throw new Error(`Failed to load ${filePath}: ${response.status}`);
+					const content = await response.text();
+					const cleanedContent = content.replace(/^---[\s\S]*?---/, '').trim();
+
+					document.querySelector('.slides').innerHTML = `
+						<section data-markdown>
+							<textarea data-template>${cleanedContent}</textarea>
+						</section>
+					`;
+					Reveal.sync();
+				} catch (error) {
+					console.error(error);
+					document.querySelector('.slides').innerHTML = `<p>Error loading slides: ${error.message}</p>`;
+				}
 			}
-		
+
 			// Markdown 파일 로드
 			loadMarkdownWithYamlRemoval('./24-12-01-csts-00-contents.md');
 		</script>
@@ -60,14 +61,15 @@
 				progress: true,
 				history: true,
 				//center: true,
-                slideNumber: 'c/t',
+				slideNumber: 'c/t',
 
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes],
-                pdfSeparateFragments: false,
-                //pdfMaxPagesPerSlide: 1,
-                //pdfPageHeightOffset: 5,
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+				pdfSeparateFragments: false,
+				//pdfMaxPagesPerSlide: 1,
+				//pdfPageHeightOffset: 5,
 			});
 		</script>
 
-	</body>
+</body>
+
 </html>
