@@ -10,8 +10,12 @@ title: Home
       <article class="post">
         <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
         <div class="entry">
-          {{ post.content | strip_html | truncate: 1000 }}
-        </div>
+          <!-- {{ post.content | truncate: 300 }} -->
+            {% assign lines = post.content | split: '\n' %}
+            {% assign first_five_lines = lines[0..4] %}
+            {{ first_five_lines | join: '\n' }}
+
+          </div>
         <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
       </article>
     {% endfor %}
