@@ -1,3 +1,11 @@
+---
+layout: post
+title: "CSTS GUIDE - 목차"
+#date: 2024-11-23
+categories: [CSTS]
+tags: [목차]
+
+---
 PART 01  테스트 개요
 
 제1장    테스트 개요 
@@ -13,6 +21,7 @@ PART 01  테스트 개요
 1.5 테스트 기본 용어
 
 Exercise
+---
 
 제2장    테스트 분류와 테스팅 방법
 
