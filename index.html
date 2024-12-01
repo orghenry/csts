@@ -12,8 +12,8 @@ title: Home
         <div class="entry">
           <!-- {{ post.content | truncate: 300 }} -->
             {% assign lines = post.content | strip_html | split: '\n' %}
-            {% assign first_five_lines = lines[0..4] %}
-            {{ first_five_lines | join: '\n' }}
+            <!-- {% assign first_five_lines = lines[0..9] %} -->
+            {{ lines | join: '\n' }}
 
           </div>
         <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
