@@ -70,7 +70,10 @@
 				const issueTitle = `Notes for Slide ${slideNumber}`;
 				//const issueBody = `Please add the notes for slide number ${slideNumber}.`;
 				const slideContent = currentSlide.innerHTML;
-				const issueBody = slideContent;
+				// If you want just the text content (without HTML tags):
+				const slideTextContent = currentSlide.textContent || currentSlide.innerText;
+
+				const issueBody = slideTextContent;
 
 				const url = `https://github.com/orghenry/csts/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
 				window.open(url, '_blank');
