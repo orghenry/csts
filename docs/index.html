@@ -42,6 +42,22 @@
                 //pdfMaxPagesPerSlide: 1,
                 //pdfPageHeightOffset: 5,
 			});
+
+
+			// Function to open GitHub Issue Template
+			function openGitHubIssue(slideNumber) {
+				const issueTemplateUrl = `https://github.com/orghenry/csts/issues/new?title=Slide+${slideNumber}+Speaker+Notes&body=Speaker+notes+for+Slide+${slideNumber}.`;
+				window.open(issueTemplateUrl, "_blank");
+			}
+
+			// Event listener for "Create Issue for Notes" button
+			document.querySelectorAll('.issue-btn').forEach((button, index) => {
+				button.addEventListener('click', () => {
+					// Get the current slide number
+					const slideNumber = index + 1;  // Slide index is 0-based, so add 1
+					openGitHubIssue(slideNumber);
+				});
+			});			
 		</script>
 
 	</body>
