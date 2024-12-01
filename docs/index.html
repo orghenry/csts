@@ -78,10 +78,7 @@
 					const slide = Reveal.getCurrentSlide();
 					const slideNumber = parseInt(slide.dataset.index, 10); // Convert to number
 
-					if (isNaN(slideNumber)) {
-						console.error("Slide number is not a valid number.");
-						return;
-					}
+					console.log(slide);
 
 					openGitHubIssue(slideNumber);
 				});
