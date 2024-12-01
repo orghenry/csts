@@ -82,6 +82,8 @@ def generate_section_list(source_folder):
                     # Extract the relative path from the source folder
                     #relative_path = os.path.relpath(file_path, folder_name)
                     
+                    # Replace backslashes with forward slashes for the file path
+                    file_path = file_path.replace("\\", "/")
                     
                     # Create the section tag for this file
                     section_tag = f'<section data-markdown="{file_path}" data-separator="\\n---" data-separator-vertical="\\n--"></section>\n'
