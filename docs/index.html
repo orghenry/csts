@@ -137,7 +137,10 @@
 					// Assuming you have vertical slides, the total index is calculated as:
 					//console.log(full); 
 					demonstrateSlideIndicesRetrieval();
-
+					// Total number of slides
+					total = Reveal.getTotalSlides();
+					past = Reveal.getSlidePastCount();
+					console.log(past+'/'+total)
 					//openGitHubIssue(totalIndex);
 				});
 			});			
