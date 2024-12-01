@@ -1,13 +1,13 @@
 ---
-layout: category
-title: "Csts"
-category: "csts"
-permalink: /categories/csts/
+layout: tag
+title: "Guide"
+tag: "guide"
+permalink: /tags/guide/
 ---
-<h1>Posts categoryged with "Csts"</h1>
+<h1>Posts tagged with "Guide"</h1>
 <ul>
   {% for post in site.posts %}
-    {% if post.categories contains page.category %}
+    {% if post.tags contains page.tag %}
       <li>
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <span>{{ post.date | date: "%B %d, %Y" }}</span>
