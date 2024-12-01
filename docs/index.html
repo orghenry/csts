@@ -72,16 +72,32 @@
 				window.open(url, '_blank');
 			}
 
+			// Method 5: Advanced Indexing with Nested Slides
+			function getAdvancedSlideInfo() {
+				const indices = Reveal.getIndices();
+				
+				return {
+					current: {
+						h: indices.h,   // Horizontal index
+						v: indices.v    // Vertical index
+					},
+					total: {
+						h: document.querySelectorAll('.slides > section').length,
+						v: document.querySelectorAll('.slides section section').length
+					},
+					fullNotation: `${indices.h + 1}.${indices.v + 1}`
+				};
+			}
+
 			// Event listener for "Create Issue for Notes" button
 			document.querySelectorAll('#issue-button').forEach((button, index) => {
 				button.addEventListener('click', () => {
-					const currentIndex = Reveal.getIndices().h + 1;
-					const totalIndex = document.querySelectorAll('.slides section').length;
-
+					full = getAdvancedSlideInfo().fullNotation
+					
 					// Assuming you have vertical slides, the total index is calculated as:
-					console.log("Total Slide Index (h + v): " + totalIndex); 
+					console.log(full); 
 
-					openGitHubIssue(totalIndex);
+					//openGitHubIssue(totalIndex);
 				});
 			});			
 		</script>
