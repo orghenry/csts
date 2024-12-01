@@ -71,57 +71,20 @@
 				//const issueBody = `Please add the notes for slide number ${slideNumber}.`;
 				const issueBody = slide;
 
-				const url = `https://github.com/orghenry/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+				const url = `https://github.com/orghenry/csts/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
 				window.open(url, '_blank');
-			}
-
-			// Function to get current and total slide indices at any time
-			function getCurrentSlideIndices() {
-				// Get current slide indices using Reveal.js
-				const indices = Reveal.getIndices();
-				
-				// Get all horizontal slides
-				const horizontalSlides = document.querySelectorAll('.slides > section');
-				
-				// Get vertical slides in the current horizontal section
-				const currentHorizontalSlide = horizontalSlides[indices.h];
-				const verticalSlides = currentHorizontalSlide.querySelectorAll('section');
-				
-				return {
-					// Current slide indices (1-based for readability)
-					current: {
-						horizontal: indices.h + 1,
-						vertical: indices.v + 1
-					},
-					// Total slide counts
-					total: {
-						horizontal: horizontalSlides.length,
-						vertical: verticalSlides.length
-					},
-					// Raw indices (0-based)
-					raw: {
-						horizontal: indices.h,
-						vertical: indices.v
-					},
-					// Detailed slide notation
-					notation: {
-						// Formats like "2.1" for 2nd horizontal slide, 1st vertical slide
-						full: `${indices.h + 1}.${indices.v + 1}`,
-						// Formats for different use cases
-						display: `Slide ${indices.h + 1}.${indices.v + 1}`
-					}
-				};
 			}
 
 			// Event listener for "Create Issue for Notes" button
 			document.querySelectorAll('#issue-button').forEach((button, index) => {
 				button.addEventListener('click', () => {
-					slides = Reveal.getCurrentSlide();
+					slide = Reveal.getCurrentSlide();
 
 					// Total number of slides
 					total = Reveal.getTotalSlides();
 					past = Reveal.getSlidePastCount();
 					console.log(past+'/'+total)
+					
 					openGitHubIssue(past+1);
 				});
 			});			
