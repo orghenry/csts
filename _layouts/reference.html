@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Posts referenced with "{{ page.reference }}" - {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ site.baseurl }}/style.css">
+</head>
+<body>
+  <header>
+    <h1>{{ site.title }}</h1>
+    <p>{{ site.description }}</p>
+  </header>
+
+  <main>
+    <h2>Posts referenced with "{{ page.reference }}"</h2>
+    <ul>
+      {% for post in site.posts %}
+        {% if post.references contains page.reference %}
+          <li>
+            <!-- Use site.baseurl to ensure the URL includes the correct base path -->
+            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+            <span>{{ post.date | date: "%B %d, %Y" }}</span>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <a href="{{ site.baseurl }}/">Back to Home</a>
+  </main>
+
+  <footer>
+    <p>&copy; {{ site.time | date: "%Y" }} {{ site.title }}</p>
+  </footer>
+</body>
+</html>
