@@ -1,0 +1,22 @@
+markdown: kramdown
+theme: jekyll-theme-slate
+
+#permalink: /:categories/:year/:month/:day/:title/
+paginate: 3
+paginate_path: "/page:num/"
+
+defaults:
+  - scope:
+      path: "search.json"
+    values:
+      layout: json
+
+# Name of your site (displayed in the header)
+# name: Web Tutorials
+# avatar: https://raw.githubusercontent.com/barryclark/jekyll-now/master/images/jekyll-logo.png
+
+# title: "Tutorials"
+# description: "Basic Tech Blog"
+# author: "Henry Moon"
+# baseurl: "" # 루트 URL
+# url: "https://hcmoon92.github.io/tutorial-blog" # GitHub Pages URL

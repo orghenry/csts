@@ -1,0 +1,37 @@
+---
+layout: default
+---
+
+<article class="post">
+  <h1>{{ page.title }}</h1>
+
+  <div class="date">
+    작성일 : {{ page.date | date: "%Y, %m, %e" }}
+  </div>
+
+  {% if content != "" %}
+  <hr>
+  {% endif %}
+
+  <div class="entry">
+    {{ content }}
+  </div>
+
+  {% if content != "" %}
+  <hr>
+  {% endif %}
+
+  <p>분류: 
+    {% for category in page.categories %}
+      <a href="{{ site.baseurl }}/categories/{{ category | replace: ' ', '-' }}">{{ category }}</a>{% unless forloop.last %}, {% endunless %}
+    {% endfor %}
+  </p>
+
+  <p>태그: 
+    {% for tag in page.tags %}
+      <a href="{{ site.baseurl }}/tags/{{ tag | replace: ' ', '-' }}">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
+    {% endfor %}
+  </p>
+
+  {% include disqus.html %}
+</article>
