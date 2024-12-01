@@ -104,13 +104,20 @@ print(section_list)
 with open(target_html_path, 'r', encoding='utf-8') as file:
     html_content = file.read()
 
-# Define the block to remove (the entire <div class="slides"> block)
-block_to_remove = r'<div class="slides">.*?</div>'
-# Define the new <div class="slides"> block that will replace the old block
+# Define the start and end tags for the block you want to replace
+start_tag = '<div class="slides">'
+end_tag = '</div>'
+
+# Define the new <div class="slides"> block to replace the old block
 new_slide_block = f'<div class="slides">{section_list}</div>'
 
-# Replace the block in the HTML content
-html_content = re.sub(block_to_remove, new_slide_block, html_content, flags=re.DOTALL)
+# Find the start and end indices of the <div class="slides"> block
+start_index = html_content.find(start_tag)
+end_index = html_content.find(end_tag, start_index)
+
+if start_index != -1 and end_index != -1:
+    # Slice the content to remove the old block and insert the new one
+    html_content = html_content[:start_index] + new_slide_block + html_content[end_index + len(end_tag):]
 
 # Write the updated content back to the target HTML file
 with open(target_html_path, 'w', encoding='utf-8') as file:
