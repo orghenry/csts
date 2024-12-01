@@ -3,6 +3,7 @@ import shutil
 
 source_folder = "../_posts/csts"
 target_base_folder = "../docs"
+target_html_path = "../docs/index.html"
 
 # # docs 폴더 및 서브디렉토리의 모든 파일 처리
 # for root, _, files in os.walk(source_folder):
@@ -81,7 +82,7 @@ def generate_section_list(source_folder):
 
                     # Extract the relative path from the source folder
                     #relative_path = os.path.relpath(file_path, folder_name)
-                    
+
                     # Replace backslashes with forward slashes for the file path
                     file_path = file_path.replace("\\", "/")
                     
