@@ -10,13 +10,8 @@ title: Home
       <article class="post">
         <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
         <div class="entry">
-          <!-- {{ post.content | truncate: 300 }} -->
-          <!-- Truncate the content and convert Markdown to HTML -->
-          {% assign lines = post.content | strip_html | split: '\n' %}
-          {% assign trunc_lines = lines[0..9] %}
-          {{ trunc_lines | join: '\n' | markdownify }}
-
-          </div>
+          {{ post.content | strip_html | truncate: 300 }}
+        </div>
         <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
       </article>
     {% endfor %}
