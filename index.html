@@ -12,7 +12,7 @@ title: Home
         <div class="entry">
           <!-- {{ post.content | truncate: 300 }} -->
           <!-- Truncate the content and convert Markdown to HTML -->
-          {% assign lines = post.content | split: '\n' %}
+          {% assign lines = post.content | strip_html | split: '\n' %}
           {% assign trunc_lines = lines[0..9] %}
           {{ trunc_lines | join: '\n' | markdownify }}
 
