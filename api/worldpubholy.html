@@ -12,21 +12,43 @@
         .search-container {
             margin-bottom: 20px;
         }
-        .holiday-list {
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 5px;
+            grid-template-rows: repeat(6, 1fr);
+            max-width: 700px;
+            margin: 0 auto;
             margin-top: 20px;
-            border-top: 1px solid #ccc;
-            padding-top: 20px;
+        }
+        .calendar-header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .calendar-day {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            min-height: 50px;
+            vertical-align: top;
         }
         .holiday-item {
-            margin-bottom: 15px;
-        }
-        .holiday-item h3 {
-            font-size: 1.2em;
-            margin: 0;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #333;
         }
         .holiday-item p {
-            font-size: 1em;
-            margin: 5px 0;
+            margin: 0;
+            padding: 0;
+        }
+        .holiday-item h3 {
+            font-size: 1.1em;
+            margin: 0;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -60,11 +82,9 @@
         <button id="search-btn">Search Holidays</button>
     </div>
 
-    <div id="loading" style="display: none;">Loading...</div>
+    <div id="loading" class="loading" style="display: none;">Loading...</div>
 
-    <div id="holiday-results" class="holiday-list">
-        <!-- Holiday results will be displayed here -->
-    </div>
+    <div id="calendar-container"></div>
 
     <script>
         document.getElementById('search-btn').addEventListener('click', function() {
@@ -78,7 +98,7 @@
 
             // Show loading message
             document.getElementById('loading').style.display = 'block';
-            document.getElementById('holiday-results').innerHTML = '';
+            document.getElementById('calendar-container').innerHTML = '';
 
             const url = `https://date.nager.at/api/v3/publicholidays/${year}/${countryCode}`;
 
@@ -89,28 +109,87 @@
                     document.getElementById('loading').style.display = 'none';
 
                     if (data && data.length > 0) {
-                        let htmlContent = '';
+                        const holidaysByDate = {};
 
                         data.forEach(holiday => {
-                            htmlContent += `
-                                <div class="holiday-item">
-                                    <h3>${holiday.localName}</h3>
-                                    <p><strong>Date:</strong> ${holiday.date}<br>
-                                    <strong>Country:</strong> ${holiday.countryCode}</p>
-                                </div>
-                            `;
+                            const date = new Date(holiday.date);
+                            const month = date.getMonth();
+                            const day = date.getDate();
+                            const holidayData = `<div class="holiday-item"><h3>${holiday.localName}</h3><p><strong>Date:</strong> ${holiday.date}</p></div>`;
+
+                            if (!holidaysByDate[month]) {
+                                holidaysByDate[month] = {};
+                            }
+                            if (!holidaysByDate[month][day]) {
+                                holidaysByDate[month][day] = [];
+                            }
+
+                            holidaysByDate[month][day].push(holidayData);
                         });
 
-                        document.getElementById('holiday-results').innerHTML = htmlContent;
+                        // Build Calendar for the selected year and month
+                        buildCalendar(year, holidaysByDate);
                     } else {
-                        document.getElementById('holiday-results').innerHTML = '<p>No holidays found for the selected country.</p>';
+                        document.getElementById('calendar-container').innerHTML = '<p>No holidays found for the selected country.</p>';
                     }
                 })
                 .catch(error => {
                     document.getElementById('loading').style.display = 'none';
-                    document.getElementById('holiday-results').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+                    document.getElementById('calendar-container').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
                 });
         });
+
+        function buildCalendar(year, holidaysByDate) {
+            const calendarContainer = document.getElementById('calendar-container');
+            calendarContainer.innerHTML = ''; // Clear any previous calendar
+
+            for (let month = 0; month < 12; month++) {
+                const monthHeader = document.createElement('div');
+                monthHeader.classList.add('calendar-header');
+                monthHeader.innerText = new Date(year, month).toLocaleString('default', { month: 'long' });
+                calendarContainer.appendChild(monthHeader);
+
+                const monthGrid = document.createElement('div');
+                monthGrid.classList.add('calendar');
+                calendarContainer.appendChild(monthGrid);
+
+                const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+                // Add weekday headers
+                daysOfWeek.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.classList.add('calendar-header');
+                    dayHeader.innerText = day;
+                    monthGrid.appendChild(dayHeader);
+                });
+
+                // Get the first day of the month
+                const firstDay = new Date(year, month, 1).getDay();
+                const lastDate = new Date(year, month + 1, 0).getDate();
+
+                // Fill the calendar with empty days before the first day of the month
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    monthGrid.appendChild(emptyDay);
+                }
+
+                // Fill the calendar with days of the month
+                for (let day = 1; day <= lastDate; day++) {
+                    const dayCell = document.createElement('div');
+                    dayCell.classList.add('calendar-day');
+                    dayCell.innerText = day;
+
+                    // Add holidays for this day, if any
+                    if (holidaysByDate[month] && holidaysByDate[month][day]) {
+                        holidaysByDate[month][day].forEach(holiday => {
+                            dayCell.innerHTML += holiday;
+                        });
+                    }
+
+                    monthGrid.appendChild(dayCell);
+                }
+            }
+        }
     </script>
 
 </body>
