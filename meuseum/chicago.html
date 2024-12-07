@@ -1,125 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Art Institute Collection Search</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .search-container {
-            margin-bottom: 20px;
-        }
-        .search-container input, .search-container button {
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .loading {
-            text-align: center;
-            font-size: 20px;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search and Fetch Artwork</title>
 </head>
 <body>
+  <h1>Search Artwork</h1>
+  
+  <!-- Search Input -->
+  <label for="search-input">Enter search query (e.g., artist, style):</label>
+  <input type="text" id="search-input" placeholder="Enter search query">
+  <button onclick="searchArtwork()">Search</button>
+  
+  <h2>Search Results</h2>
+  
+  <!-- Table to Display Artwork Data -->
+  <table border="1" id="artwork-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Score</th>
+        <th>Thumbnail</th>
+        <th>API Model</th>
+        <th>Boosted</th>
+        <th>API Link</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data rows will be inserted here -->
+    </tbody>
+  </table>
 
-    <h1>Search Art Institute Collection</h1>
+  <script>
+    // Function to fetch artwork data based on search query
+    function searchArtwork() {
+      // Get the search input value
+      const query = document.getElementById('search-input').value.trim();
 
-    <div class="search-container">
-        <input type="text" id="search-query" placeholder="Enter search term (e.g., 'painting', 'sculpture')">
-        <button id="search-btn">Search</button>
-    </div>
+      // Validate input
+      if (!query) {
+        alert('Please enter a search query.');
+        return;
+      }
 
-    <div id="loading" class="loading" style="display: none;">Loading...</div>
+      // Build the API URL with the query parameter for searching
+      const url = `https://api.artic.edu/api/v1/artworks/search?q=${query}`;
 
-    <table id="object-results" style="display: none;">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Artist</th>
-                <th>Object Date</th>
-                <th>Medium</th>
-                <th>Department</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Search results will be added here -->
-        </tbody>
-    </table>
+      // Fetch data from the API
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.data && data.data.length > 0) {
+            const artworks = data.data; // Array of artworks from the search response
 
-    <div id="no-results" style="display: none; text-align: center;">No objects found for your search term.</div>
+            // Get the table body element
+            const tableBody = document.querySelector('#artwork-table tbody');
 
-    <script>
-        document.getElementById('search-btn').addEventListener('click', function() {
-            const query = document.getElementById('search-query').value;
+            // Clear any existing rows
+            tableBody.innerHTML = '';
 
-            if (!query) {
-                alert('Please enter a search term.');
-                return;
-            }
+            // Loop through the artworks and create a table row for each
+            artworks.forEach(artwork => {
+              const row = document.createElement('tr');
 
-            // Show loading message
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('object-results').style.display = 'none';
-            document.getElementById('no-results').style.display = 'none';
+              // Add data to the row
+              row.innerHTML = `
+                <td>${artwork.id}</td>
+                <td>${artwork.title}</td>
+                <td>${artwork._score}</td>
+                <td><img src="data:image/gif;base64,${artwork.thumbnail.lqip}" alt="${artwork.title} Thumbnail" width="100"></td>
+                <td>${artwork.api_model}</td>
+                <td>${artwork.is_boosted ? 'Yes' : 'No'}</td>
+                <td><a href="${artwork.api_link}" target="_blank">View API</a></td>
+                <td>${artwork.timestamp}</td>
+              `;
 
-            const url = `https://api.artic.edu/api/v1/artworks/search?q=${query}`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    // Hide loading message
-                    document.getElementById('loading').style.display = 'none';
-
-                    const resultsTable = document.getElementById('object-results');
-                    const noResultsMessage = document.getElementById('no-results');
-                    const tbody = resultsTable.querySelector('tbody');
-                    tbody.innerHTML = ''; // Clear previous results
-
-                    if (data && data.data && data.data.length > 0) {
-                        resultsTable.style.display = 'table';
-
-                        // Iterate through the results and display each one
-                        data.data.forEach(object => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${object.title || 'Unknown'}</td>
-                                <td>${object.artist_title || 'Unknown'}</td>
-                                <td>${object.date_display || 'Unknown'}</td>
-                                <td>${object.medium_display || 'Not Available'}</td>
-                                <td>${object.department_title || 'Not Available'}</td>
-                            `;
-                            tbody.appendChild(row);
-                        });
-                    } else {
-                        noResultsMessage.style.display = 'block';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('no-results').style.display = 'block';
-                    document.getElementById('no-results').innerHTML = `Error fetching data: ${error.message}`;
-                });
+              // Append the new row to the table body
+              tableBody.appendChild(row);
+            });
+          } else {
+            alert('No artworks found for this query.');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+          alert('Error fetching data.');
         });
-    </script>
-
+    }
+  </script>
 </body>
 </html>
