@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Institute Collection Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-container input, .search-container button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .loading {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Search Art Institute Collection</h1>
+
+    <div class="search-container">
+        <input type="text" id="search-query" placeholder="Enter search term (e.g., 'painting', 'sculpture')">
+        <button id="search-btn">Search</button>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">Loading...</div>
+
+    <table id="object-results" style="display: none;">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Object Date</th>
+                <th>Medium</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Search results will be added here -->
+        </tbody>
+    </table>
+
+    <div id="no-results" style="display: none; text-align: center;">No objects found for your search term.</div>
+
+    <script>
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const query = document.getElementById('search-query').value;
+
+            if (!query) {
+                alert('Please enter a search term.');
+                return;
+            }
+
+            // Show loading message
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('object-results').style.display = 'none';
+            document.getElementById('no-results').style.display = 'none';
+
+            const url = `https://api.artic.edu/api/v1/artworks/search?q=${query}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Hide loading message
+                    document.getElementById('loading').style.display = 'none';
+
+                    const resultsTable = document.getElementById('object-results');
+                    const noResultsMessage = document.getElementById('no-results');
+                    const tbody = resultsTable.querySelector('tbody');
+                    tbody.innerHTML = ''; // Clear previous results
+
+                    if (data && data.data && data.data.length > 0) {
+                        resultsTable.style.display = 'table';
+
+                        // Iterate through the results and display each one
+                        data.data.forEach(object => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${object.title || 'Unknown'}</td>
+                                <td>${object.artist_title || 'Unknown'}</td>
+                                <td>${object.date_display || 'Unknown'}</td>
+                                <td>${object.medium_display || 'Not Available'}</td>
+                                <td>${object.department_title || 'Not Available'}</td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    } else {
+                        noResultsMessage.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('no-results').style.display = 'block';
+                    document.getElementById('no-results').innerHTML = `Error fetching data: ${error.message}`;
+                });
+        });
+    </script>
+
+</body>
+</html>
