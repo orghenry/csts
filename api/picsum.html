@@ -34,7 +34,11 @@
         document.getElementById('loadImage').addEventListener('click', function() {
             const imageContainer = document.getElementById('imageContainer');
             imageContainer.innerHTML = ''; // Clear any previous images
-            const imageUrl = 'https://picsum.photos/800/600'; // 800x600 random image
+
+            //const imageUrl = 'https://picsum.photos/800/600'; // 800x600 random image
+            // Add a unique query parameter (timestamp) to ensure fresh image
+            const imageUrl = `https://picsum.photos/800/600?random=${new Date().getTime()}`;
+
 
             const img = document.createElement('img');
             img.src = imageUrl;
