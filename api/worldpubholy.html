@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nager Date API Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .holiday-list {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .holiday-item {
+            margin-bottom: 15px;
+        }
+        .holiday-item h3 {
+            font-size: 1.2em;
+            margin: 0;
+        }
+        .holiday-item p {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Search Public Holidays</h1>
+
+    <div class="search-container">
+        <label for="country-code">Enter Country Code (e.g., US, GB, FR):</label>
+        <input type="text" id="country-code" placeholder="e.g., US">
+        <button id="search-btn">Search Holidays</button>
+    </div>
+
+    <div id="loading" style="display: none;">Loading...</div>
+
+    <div id="holiday-results" class="holiday-list">
+        <!-- Holiday results will be displayed here -->
+    </div>
+
+    <script>
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const countryCode = document.getElementById('country-code').value.trim();
+
+            if (!countryCode) {
+                alert('Please enter a country code.');
+                return;
+            }
+
+            // Show loading message
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('holiday-results').innerHTML = '';
+
+            const url = `https://date.nager.at/Api/v2/PublicHolidays/2024/${countryCode}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Hide loading message
+                    document.getElementById('loading').style.display = 'none';
+
+                    if (data && data.length > 0) {
+                        let htmlContent = '';
+
+                        data.forEach(holiday => {
+                            htmlContent += `
+                                <div class="holiday-item">
+                                    <h3>${holiday.localName}</h3>
+                                    <p><strong>Date:</strong> ${holiday.date}<br>
+                                    <strong>Country:</strong> ${holiday.countryCode}</p>
+                                </div>
+                            `;
+                        });
+
+                        document.getElementById('holiday-results').innerHTML = htmlContent;
+                    } else {
+                        document.getElementById('holiday-results').innerHTML = '<p>No holidays found for the selected country.</p>';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('holiday-results').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+                });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload with File.io API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+        .result {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Upload File to File.io</h1>
+        <input type="file" id="fileInput" />
+        <button id="uploadBtn">Upload File</button>
+
+        <div class="result" id="result">
+            <h3>File Uploaded Successfully!</h3>
+            <p>Download Link: <a id="downloadLink" href="#" target="_blank">Click Here</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Show loading state (optional)
+            document.getElementById('result').style.display = 'none';
+
+            fetch('https://file.io', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const downloadLink = data.link;
+                    document.getElementById('downloadLink').href = downloadLink;
+                    document.getElementById('result').style.display = 'block';
+                } else {
+                    alert('File upload failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+                alert('Error uploading file. Please try again.');
+            });
+        });
+    </script>
+
+</body>
+</html>
