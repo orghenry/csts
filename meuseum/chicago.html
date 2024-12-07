@@ -71,7 +71,7 @@
                 <td>${artwork.id}</td>
                 <td>${artwork.title}</td>
                 <td>${artwork._score}</td>
-                <td><img src="data:image/gif;base64,${artwork.thumbnail.lqip}" alt="${artwork.title} Thumbnail" width="100"></td>
+                <td><img src="${artwork.thumbnail.lqip}" alt="${artwork.title} Thumbnail" width="100"></td>
                 <td>${artwork.api_model}</td>
                 <td>${artwork.is_boosted ? 'Yes' : 'No'}</td>
                 <td><a href="${artwork.api_link}" target="_blank">View API</a></td>
