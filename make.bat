@@ -3,5 +3,5 @@ cd _python
 python build-all.py
 cd ..
 git add .
-git commit -m "csts updated"
+git commit -m "orghenry/csts updated"
 git push
